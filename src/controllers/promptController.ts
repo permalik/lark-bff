@@ -1,34 +1,32 @@
 import { Request, Response, NextFunction } from "express";
 import { prompts, Prompt } from "../models/prompt";
+import { submitPrompt } from "../services/turn";
 
-export const createPrompt = (
+export async function createPrompt(
   req: Request,
   res: Response,
   next: NextFunction,
-) => {
+) {
   try {
     const { content } = req.body;
     const newPrompt: Prompt = { id: Date.now(), content };
-    prompts.push(newPrompt);
+    console.log("NEWP", newPrompt);
+    await submitPrompt(newPrompt);
     res.status(201).json(newPrompt);
   } catch (error) {
     next(error);
   }
-};
+}
 
-export const getPrompts = (req: Request, res: Response, next: NextFunction) => {
+export function getPrompts(req: Request, res: Response, next: NextFunction) {
   try {
     res.json(prompts);
   } catch (error) {
     next(error);
   }
-};
+}
 
-export const getPromptById = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export function getPromptById(req: Request, res: Response, next: NextFunction) {
   try {
     const id = parseInt(req.params.id, 10);
     const prompt = prompts.find((p) => p.id === id);
@@ -39,13 +37,9 @@ export const getPromptById = (
   } catch (error) {
     next(error);
   }
-};
+}
 
-export const updatePrompt = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export function updatePrompt(req: Request, res: Response, next: NextFunction) {
   try {
     const id = parseInt(req.params.id, 10);
     const { content } = req.body;
@@ -59,13 +53,9 @@ export const updatePrompt = (
   } catch (error) {
     next(error);
   }
-};
+}
 
-export const deletePrompt = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export function deletePrompt(req: Request, res: Response, next: NextFunction) {
   try {
     const id = parseInt(req.params.id, 10);
     const promptIndex = prompts.findIndex((p) => p.id === id);
@@ -78,4 +68,4 @@ export const deletePrompt = (
   } catch (error) {
     next(error);
   }
-};
+}
