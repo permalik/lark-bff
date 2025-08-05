@@ -9,7 +9,7 @@ export async function createPrompt(
 ) {
   try {
     const { content } = req.body;
-    const newPrompt: Prompt = { id: Date.now(), content };
+    const newPrompt: Prompt = { msgId: Date.now(), content };
     console.log("NEWP", newPrompt);
     await submitPrompt(newPrompt);
     res.status(201).json(newPrompt);
@@ -28,8 +28,8 @@ export function getPrompts(req: Request, res: Response, next: NextFunction) {
 
 export function getPromptById(req: Request, res: Response, next: NextFunction) {
   try {
-    const id = parseInt(req.params.id, 10);
-    const prompt = prompts.find((p) => p.id === id);
+    const id = parseInt(req.params.msgId, 10);
+    const prompt = prompts.find((p) => p.msgId === id);
     if (!prompt) {
       res.status(404).json({ message: "Prompt not found" });
     }
@@ -41,9 +41,9 @@ export function getPromptById(req: Request, res: Response, next: NextFunction) {
 
 export function updatePrompt(req: Request, res: Response, next: NextFunction) {
   try {
-    const id = parseInt(req.params.id, 10);
+    const id = parseInt(req.params.msgId, 10);
     const { content } = req.body;
-    const promptIndex = prompts.findIndex((p) => p.id === id);
+    const promptIndex = prompts.findIndex((p) => p.msgId === id);
     if (promptIndex === -1) {
       res.status(404).json({ message: "Prompt not found" });
       return;
@@ -57,8 +57,8 @@ export function updatePrompt(req: Request, res: Response, next: NextFunction) {
 
 export function deletePrompt(req: Request, res: Response, next: NextFunction) {
   try {
-    const id = parseInt(req.params.id, 10);
-    const promptIndex = prompts.findIndex((p) => p.id === id);
+    const id = parseInt(req.params.msgId, 10);
+    const promptIndex = prompts.findIndex((p) => p.msgId === id);
     if (promptIndex === -1) {
       res.status(404).json({ message: "Prompt not found" });
       return;

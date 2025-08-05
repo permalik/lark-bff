@@ -1,5 +1,5 @@
 export interface Prompt {
-  id: number;
+  msgId: number;
   content: string;
 }
 
